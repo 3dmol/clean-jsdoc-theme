@@ -147,6 +147,12 @@
             members = members.filter(function(m) {
                 return m.longname && m.longname.indexOf('module:') !== 0;
             });
+            members = members.reduce((acc, member) => {
+                    if(member.access === 'private') return acc
+                    var index = acc.findIndex(m => m.id === member.id)
+                    index < 0 ? acc.push(member) : acc[index] = member
+                    return acc
+                }, []);
         }
         if (members && members.length && members.forEach) {
     ?>
@@ -160,6 +166,13 @@
     <?js
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname, ...shouldExcludeInherited});
         if (methods && methods.length && methods.forEach) {
+            // Remove duplicated definition, keep overwritten by the converter
+            methods = methods.reduce((acc, method) => {
+                if(method.access === 'private') return acc
+                var index = acc.findIndex(m => m.id === method.id)
+                index < 0 ? acc.push(method) : acc[index] = method
+                return acc
+            }, []);
     ?>
         <h2 id="methods" class="subsection-title has-anchor">Methods</h2>
 
