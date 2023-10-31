@@ -147,14 +147,14 @@
             members = members.filter(function(m) {
                 return m.longname && m.longname.indexOf('module:') !== 0;
             });
+        }
+        if (members && members.length && members.forEach) {
             members = members.reduce((acc, member) => {
                     if(member.access === 'private') return acc
                     var index = acc.findIndex(m => m.id === member.id)
                     index < 0 ? acc.push(member) : acc[index] = member
                     return acc
-                }, []);
-        }
-        if (members && members.length && members.forEach) {
+                }, []);        
     ?>
         <h2 id="members" class="subsection-title has-anchor">Members</h2>
 
